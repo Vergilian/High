@@ -1,5 +1,4 @@
 from fastapi.testclient import TestClient
-
 from app.main import app
 from datetime import datetime, timedelta, timezone
 
@@ -7,7 +6,7 @@ client = TestClient(app)
 
 def create_test_table():
     return client.post("/tables/", json={
-        "name": "Test for reservation",
+        "name": "Test for Reservation",
         "seats": 2,
         "location": "Testing area"
     }).json()
@@ -29,12 +28,11 @@ def test_create_reservation():
 
 def test_conflict_reservation():
     table = create_test_table()
-    start_time = datetime.utcnow().replace(microsecond=0)
+    start_time = datetime.now(timezone.utc).replace(microsecond=0)
 
     # Первая бронь
     client.post("/reservations/", json={
         "customer_name": "Alice",
-        "table_id": table["id"],
         "reservation_time": start_time.isoformat(),
         "duration_minutes": 60
     })
